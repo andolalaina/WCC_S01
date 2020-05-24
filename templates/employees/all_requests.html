@@ -1,0 +1,114 @@
+{% extends 'base/main.html' %}
+
+{% block title %}
+    Mpiasa
+{% endblock %}
+
+{% block body %}
+    <nav class="navbar navbar-expand-lg bg-dark mb-3">
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="{% url 'employees' %}" class="nav-link text-white">Firaisana</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link text-white active">Fangatahana</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Lisitry ny fangatahana
+                </div>
+                <div class="card-body">
+                    <table class="table" id="request_table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nanao ny fangatahana</th>
+                                <th>Datin'ny fangatahana</th>
+                                <th>Isa ilaina</th>
+                                <th>fahavitana</th>
+                                <th>Hisintona</th>
+                                <th>Handefa ny kopia</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for request in office.request_set.all %}
+                            <tr>
+                                <td>{{ request.id }}</td>
+                                <td>{{ request.requester.account.last_name }} {{ request.requester.account.first_name }}</td>
+                                <td>{{ request.request_date }}</td>
+                                <td>{{ request.dup_number }}</td>
+                                <td>{{ request.state }}</td>
+                                <td>
+                                    {% if request.state == 'Mbola tsy vita' %}
+                                    <a href="{% url 'request_pdf' request.id %}">PDF</a>
+                                    {% else %}
+                                    <a href="{{ request.pdf.url }}">PDF</a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if request.state == 'Mbola tsy vita' %}
+                                    <form action="" method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <input type="text" name="request_id" value="{{ request.id }}" hidden>
+                                        <div class="form-group">
+                                            <input type="file" name="pdf_req_file" class="form-control-sm form-control-file">
+                                        </div>
+                                        <input type="submit" name="send_file" value="Halefa" class="btn btn-sm btn-primary">
+                                    </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script_extender %}
+    <script>
+        $(document).ready( function () {
+            $('#request_table').DataTable({
+                language: {
+                    "sEmptyTable":     "Tsy misy vokatra hita",
+                    "sInfo":           "Valiny _START_ hatramin'ny _END_ amin'ny _TOTAL_",
+                    "sInfoEmpty":      "Valiny 0 hatramin'ny 0 amin'ny 0",
+                    "sInfoFiltered":   "(voafantina amin'ny valiny miisa _MAX_)",
+                    "sInfoPostFix":    "",
+                    "sInfoThousands":  ",",
+                    "sLengthMenu":     "Hampiseo valiny miisa _MENU_",
+                    "sLoadingRecords": "Eo am-panatanterahana...",
+                    "sProcessing":     "Eo am-panatanterahana...",
+                    "sSearch":         "Hikaroka :",
+                    "sZeroRecords":    "Tsy nahitana valiny",
+                    "oPaginate": {
+                        "sFirst":    "Voaloahany",
+                        "sLast":     "Farany",
+                        "sNext":     "Manaraka",
+                        "sPrevious": "Teo aloha"
+                    },
+                    "oAria": {
+                        "sSortAscending":  ": Filaharana kely mankany amin'ny lehibe",
+                        "sSortDescending": ": Filaharana lehibe mankany amin'ny kely"
+                    },
+                    "select": {
+                            "rows": {
+                                "_": "%d lignes sélectionnées",
+                                "0": "Aucune ligne sélectionnée",
+                                "1": "1 ligne sélectionnée"
+                            } 
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

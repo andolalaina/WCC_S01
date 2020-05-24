@@ -1,0 +1,30 @@
+{% extends 'base/main.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Fampidirana olona vaovao
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.extra_tags }} alert-dismissible fade show my-2" role="alert">
+                {{message}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ user_modelform.last_name|as_crispy_field }}
+        {{ user_modelform.first_name|as_crispy_field }}
+        {{ person_modelform.birthdate|as_crispy_field }}
+        {{ person_modelform.birthplace|as_crispy_field }}
+        <input type="submit" name="submit" value="OK" class="btn btn-sm btn-success">
+    </form>
+</div>
+
+{% endblock %}

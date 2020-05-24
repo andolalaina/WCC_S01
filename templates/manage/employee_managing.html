@@ -1,0 +1,82 @@
+{% extends 'base/main.html' %}
+
+{% block title %}
+    Mpandraharaha ny mpiasa
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Lisitry ny mpiasa
+                </div>
+                <div class="card-body">
+                    <table class="table" id="request_table">
+                        <thead>
+                            <tr>
+                                <th>Anarana</th>
+                                <th>Fanampin'anarana</th>
+                                <th>Daty nahaterahana</th>
+                                <th>Toerana nahaterahana</th>
+                                <th>Firaisana iasana</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in employees %}
+                            <tr>
+                                <td>{{user.last_name}}</td>
+                                <td>{{user.first_name}}</td>
+                                <td>{{user.person.birthdate}}</td>
+                                <td>{{user.person.birthplace}}</td>
+                                <td>{{user.person.job_location}}</td>
+                                <td><a href="{% url 'edit_employee' user.person.id %}">Hanova</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script_extender %}
+    <script>
+        $(document).ready( function () {
+            $('#request_table').DataTable({
+                language: {
+                    "sEmptyTable":     "Tsy misy vokatra hita",
+                    "sInfo":           "Valiny _START_ hatramin'ny _END_ amin'ny _TOTAL_",
+                    "sInfoEmpty":      "Valiny 0 hatramin'ny 0 amin'ny 0",
+                    "sInfoFiltered":   "(voafantina amin'ny valiny miisa _MAX_)",
+                    "sInfoPostFix":    "",
+                    "sInfoThousands":  ",",
+                    "sLengthMenu":     "Hampiseo valiny miisa _MENU_",
+                    "sLoadingRecords": "Eo am-panatanterahana...",
+                    "sProcessing":     "Eo am-panatanterahana...",
+                    "sSearch":         "Hikaroka :",
+                    "sZeroRecords":    "Tsy nahitana valiny",
+                    "oPaginate": {
+                        "sFirst":    "Voaloahany",
+                        "sLast":     "Farany",
+                        "sNext":     "Manaraka",
+                        "sPrevious": "Teo aloha"
+                    },
+                    "oAria": {
+                        "sSortAscending":  ": Filaharana kely mankany amin'ny lehibe",
+                        "sSortDescending": ": Filaharana lehibe mankany amin'ny kely"
+                    },
+                    "select": {
+                            "rows": {
+                                "_": "%d lignes sélectionnées",
+                                "0": "Aucune ligne sélectionnée",
+                                "1": "1 ligne sélectionnée"
+                            } 
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

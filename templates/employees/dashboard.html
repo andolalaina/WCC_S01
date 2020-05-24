@@ -1,0 +1,97 @@
+{% extends 'base/main.html' %}
+
+{% block title %}
+    Mpiasa
+{% endblock %}
+
+{% block body %}
+    <nav class="navbar navbar-expand-lg bg-dark mb-3">
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="#" class="nav-link text-white active">Firaisana</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'employees_requests' %}" class="nav-link text-white">Fangatahana</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Lisitry ny olona tafiditra ato amin'ny firaisana
+                </div>
+                <div class="card-body">
+                    <table class="table" id="request_table">
+                        <thead>
+                            <tr>
+                                <th>Anarana</th>
+                                <th>Fanampin'anarana</th>
+                                <th>Daty nahaterahana</th>
+                                <th>Toerana nahaterahana</th>
+                                <th>Isan'ny Fangatahana natao</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for person in office.center.person_set.all %}
+                            {% if not person.job_location %}
+                            <tr>
+                                <td>{{person.account.last_name}}</td>
+                                <td>{{person.account.first_name}}</td>
+                                <td>{{person.birthdate}}</td>
+                                <td>{{person.birthplace}}</td>
+                                <td>{{person.request_set.count}}</td>
+                                <td><a href="{% url 'edit_user' person.id %}">Hanova</a></td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script_extender %}
+    <script>
+        $(document).ready( function () {
+            $('#request_table').DataTable({
+                language: {
+                    "sEmptyTable":     "Tsy misy vokatra hita",
+                    "sInfo":           "Valiny _START_ hatramin'ny _END_ amin'ny _TOTAL_",
+                    "sInfoEmpty":      "Valiny 0 hatramin'ny 0 amin'ny 0",
+                    "sInfoFiltered":   "(voafantina amin'ny valiny miisa _MAX_)",
+                    "sInfoPostFix":    "",
+                    "sInfoThousands":  ",",
+                    "sLengthMenu":     "Hampiseo valiny miisa _MENU_",
+                    "sLoadingRecords": "Eo am-panatanterahana...",
+                    "sProcessing":     "Eo am-panatanterahana...",
+                    "sSearch":         "Hikaroka :",
+                    "sZeroRecords":    "Tsy nahitana valiny",
+                    "oPaginate": {
+                        "sFirst":    "Voaloahany",
+                        "sLast":     "Farany",
+                        "sNext":     "Manaraka",
+                        "sPrevious": "Teo aloha"
+                    },
+                    "oAria": {
+                        "sSortAscending":  ": Filaharana kely mankany amin'ny lehibe",
+                        "sSortDescending": ": Filaharana lehibe mankany amin'ny kely"
+                    },
+                    "select": {
+                            "rows": {
+                                "_": "%d lignes sélectionnées",
+                                "0": "Aucune ligne sélectionnée",
+                                "1": "1 ligne sélectionnée"
+                            } 
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

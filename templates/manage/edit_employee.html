@@ -1,0 +1,21 @@
+{% extends 'base/main.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Hanova mpiasa
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ user_modelform.last_name|as_crispy_field }}
+        {{ user_modelform.first_name|as_crispy_field }}
+        {{ person_modelform.birthdate|as_crispy_field }}
+        {{ person_modelform.birthplace|as_crispy_field }}
+        <a href="{% url 'manager' %}" class="btn btn-sm btn-outline-primary">Hiverina</a>
+        <input type="submit" name="submit" value="OK" class="btn btn-sm btn-success">
+    </form>
+</div>
+
+{% endblock %}

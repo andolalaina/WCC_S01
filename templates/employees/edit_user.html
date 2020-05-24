@@ -1,0 +1,19 @@
+{% extends 'base/main.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Hanova
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ user_modelform|crispy }}
+        {{ person_modelform|crispy }}
+        <a href="{% url 'employees' %}" class="btn btn-sm btn-outline-primary">Hiverina</a>
+        <input type="submit" name="submit" value="OK" class="btn btn-sm btn-success">
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,147 @@
+{% extends 'base/main.html' %}
+
+{% block title %}
+    Olon-tsotra
+{% endblock %}
+
+{% block body %}
+    <div class="row mb-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Hanao fangatahana
+                </div>
+                <div class="card-body">
+                    <div class="card-text">
+                        <form action="" method="POST" class="form">
+                            {% csrf_token %}
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.extra_tags }} alert-dismissible fade show my-2" role="alert">
+                                        {{message}}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            <div class="form-group">
+                                <label for="request_number">Isan'ny kopia ilainao : </label>
+                                <select name="request_number" id="request_number">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                                <small class="form-text text-muted">
+                                    Ny fangatahana dia tsy azo atao raha tsy isaky ny fito (07) andro.
+                                </small>
+                            </div>
+                            <input type="submit" name="document_request" class="btn btn-sm btn-dark" value="Hanao fangatahana">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header">
+                    Mombamomba ahy
+                </div>
+                <div class="card-body">
+                    <div class="card-text">
+                        <p>
+                            <b>Anarana :</b> {{ user.last_name }}
+                        </p>
+                        <p>
+                            <b>Fanampinan'anarana :</b> {{ user.first_name }}
+                        </p>
+                        <p>
+                            <b>Teraka ny :</b> {{ user.person.birthdate }}
+                        </p>
+                        <p>
+                            <b>Tao :</b> {{ user.person.birthplace }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Lisitry ny fangatahana natao
+                </div>
+                <div class="card-body">
+                    <table class="table" id="request_table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>daty</th>
+                                <th>isa nangatahana</th>
+                                <th>fahavitana</th>
+                                <th>pdf</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for request in user.person.request_set.all %}
+                            <tr>
+                                <td>{{request.id}}</td>
+                                <td>{{request.request_date}}</td>
+                                <td>{{request.dup_number}}</td>
+                                <td>{{request.state}}</td>
+                                <td>
+                                    {% if not request.state == 'Mbola tsy vita' %}
+                                    <a href="{{ request.pdf.url }}">Hisintona</a>
+                                    {% else %}
+                                    <span class="text-muted">Mbola tsy vita tompoko.</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script_extender %}
+    <script>
+        $(document).ready( function () {
+            $('#request_table').DataTable({
+                language: {
+                    "sEmptyTable":     "Tsy misy vokatra hita",
+                    "sInfo":           "Valiny _START_ hatramin'ny _END_ amin'ny _TOTAL_",
+                    "sInfoEmpty":      "Valiny 0 hatramin'ny 0 amin'ny 0",
+                    "sInfoFiltered":   "(voafantina amin'ny valiny miisa _MAX_)",
+                    "sInfoPostFix":    "",
+                    "sInfoThousands":  ",",
+                    "sLengthMenu":     "Hampiseo valiny miisa _MENU_",
+                    "sLoadingRecords": "Eo am-panatanterahana...",
+                    "sProcessing":     "Eo am-panatanterahana...",
+                    "sSearch":         "Hikaroka :",
+                    "sZeroRecords":    "Tsy nahitana valiny",
+                    "oPaginate": {
+                        "sFirst":    "Voaloahany",
+                        "sLast":     "Farany",
+                        "sNext":     "Manaraka",
+                        "sPrevious": "Teo aloha"
+                    },
+                    "oAria": {
+                        "sSortAscending":  ": Filaharana kely mankany amin'ny lehibe",
+                        "sSortDescending": ": Filaharana lehibe mankany amin'ny kely"
+                    },
+                    "select": {
+                            "rows": {
+                                "_": "%d lignes sélectionnées",
+                                "0": "Aucune ligne sélectionnée",
+                                "1": "1 ligne sélectionnée"
+                            } 
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% load static %}
+
+<html>
+    <head>
+        <title>
+            WCC - {% block title %}{% endblock %}
+        </title>
+        <link rel="stylesheet" href="{% static 'vendor/bootstrap-4.4.1-dist/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'vendor/DataTables/datatables.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <script src="{% static 'vendor/jquery-3.4.1.min.js' %}"></script>
+        <script src="{% static 'vendor/bootstrap-4.4.1-dist/bootstrap.js' %}"></script>
+        <script src="{% static 'vendor/DataTables/datatables.js' %}"></script>
+    </head>
+
+    <body>
+        <header>
+            <nav class="navbar bg-dark text-light mb-3">
+                <div class="navbar-brand">
+                    WCC
+                </div>
+                {% block header_button %}
+                <a href="{% url 'logout' %}" class="btn btn-sm btn-danger" >Hiala</a>
+                {% endblock %}
+            </nav>
+        </header>
+        <div class="container-fluid">
+            {% block body %}
+            {% endblock %}
+        </div>
+        {% block script_extender %}
+        {% endblock %}
+    </body>
+</html>
